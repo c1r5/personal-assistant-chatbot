@@ -9,7 +9,6 @@ from aiogram.filters import Command
 
 from modules.bot.telegram.constants import OWNER_USER_ID, TELEGRAM_BOT_API_KEY
 from modules.bot.telegram.models.chat_message import UserMessage
-from modules.helpers import getenv
 from modules.bot.telegram.chat import Chat
 
 import logging
@@ -25,7 +24,7 @@ async def run_telegram_bot():
         await dp.start_polling(bot)
     except Exception as e:
         log.error("run_telegram_bot_error", e)
-        
+
 async def send_file(buffer: BytesIO, filename: str | None):
     try:
         buffer.seek(0)
@@ -35,14 +34,14 @@ async def send_file(buffer: BytesIO, filename: str | None):
         await bot.send_document(chat_id=OWNER_USER_ID, document=input_file)
     except Exception as e:
         log.error("send_file_error", e)
-        
+
 async def send_message(text: str):
     try:
         await bot.send_message(chat_id=OWNER_USER_ID, text=text)
     except Exception as e:
         log.error("send_message_error", e)
         raise e
-    
+
 @dp.message(Command("health"))
 async def health_check(message: Message):
     try:
@@ -50,8 +49,8 @@ async def health_check(message: Message):
     except Exception as e:
         log.error("health_check_error", e)
         await message.answer("An error occurred while checking health.")
-        
-        
+
+
 @dp.message()
 async def handle_message(message: Message):
     try:

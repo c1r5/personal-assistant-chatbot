@@ -21,12 +21,16 @@ class Chat:
         self.__message_listeners.append(cb)
         return self
 
+    def remove_on_message_listener(self, cb: MessageCallback):
+        self.__message_listeners.remove(cb)
+        return self
+
     async def emit_message(self, message: UserMessage | None):
         if message is not None:
             logger.info(f"Chat message: {message}")
             for listener in self.__message_listeners:
                 await listener(message)
-    
+
     async def send_message(self, bot_message: BotMessage):
         try:
             await self.bot.send_message(
