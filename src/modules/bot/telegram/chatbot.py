@@ -42,6 +42,14 @@ async def send_message(text: str):
         log.error("send_message_error", e)
         raise e
 
+@dp.message(Command("version"))
+async def health_check(message: Message):
+    try:
+        await message.reply("1.0.0")
+    except Exception as e:
+        log.error("version_check_error", e)
+        await message.answer("An error occurred while checking health.")
+        
 @dp.message(Command("health"))
 async def health_check(message: Message):
     try:
