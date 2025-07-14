@@ -1,7 +1,7 @@
 services:
   chatbot:
     build: .
-    container_name: chatbot
+    container_name: chatbot_service
     image: telegram-chatbot-service
     env_file:
       - ./.env
@@ -10,4 +10,3 @@ services:
     volumes:
       - ./data/:/app/data/
       - ./logs/:/app/logs/
-    

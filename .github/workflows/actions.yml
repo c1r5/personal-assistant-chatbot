@@ -1,0 +1,29 @@
+name: Deploy Chatbot Service
+
+on:
+  push:
+    branches:
+      - master # ajuste se for 'master' ou outro nome
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: self-hosted
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 📦 Sincronizar arquivos com a VPS (via rsync)
+        run: |
+          rsync -avz --exclude-from='.rsync-exclude' ./ \
+            deploy:/home/ubuntu/git/chatbot-service
+
+      - name: 🚀 Subir containers com Docker Compose
+        run: |
+          ssh deploy '
+            cd /home/ubuntu/git/chatbot-service &&
+            docker compose down &&
+            docker compose up --build -d &&
+            docker compose ps
+          '
