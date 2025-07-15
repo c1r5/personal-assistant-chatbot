@@ -7,7 +7,7 @@ from modules.bot.telegram.models.chat_message import BotMessage, UserMessage
 from modules.server.controllers.send import send_route
 from modules.server.rate_limiter import limiter
 
-from modules.server.security import get_api_key
+from modules.server.security import get_api_key, get_key_info
 
 import logging
 
@@ -32,15 +32,22 @@ async def auth_test(key_info: dict = Depends(get_api_key)):
     """
     return {"message": "Você está autenticado!", "key_info": key_info}
 
-@app_instance.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket, key_info: dict = Depends(get_api_key)):
+@app_instance.websocket("/ws/{api_key}")
+async def websocket_endpoint(websocket: WebSocket, api_key: str):
     """
     Endpoint de WebSocket para comunicação em tempo real.
 
-    A autenticação é feita através da dependência `get_api_key`, que espera
-    o header `X-API-Key`. Se a chave for inválida, a conexão será rejeitada
-    com um status HTTP 403.
+    A autenticação é feita através do metodo `get_key_info`, que espera
+    a api_key. Se a chave for inválida, a conexão será rejeitada
+    com um status 403.
     """
+
+    key_info = get_key_info(api_key)
+
+    if not key_info:
+        await websocket.close(code=403)
+        return
+
     await websocket.accept()
     websocket.state.key_info = key_info
 
