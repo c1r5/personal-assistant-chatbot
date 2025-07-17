@@ -1,15 +1,15 @@
-import asyncio
 import logging
-import signal
+
 from typing import Literal, cast
 from uvicorn import Config, Server
 
-from dotenv import load_dotenv
-
-
-from modules.bot import run_telegram_bot
 from modules.helpers import getenv
-from modules.server import app_instance
+from modules.server import asgi
+from modules.bot import run_telegram_bot
+
+from dotenv import load_dotenv
+import asyncio
+import signal
 
 
 load_dotenv()
@@ -34,11 +34,10 @@ logger = logging.getLogger(__name__)
 
 # Function to run FastAPI server
 async def run_fastapi():
-    config = Config(app=app_instance, host="0.0.0.0",
+    config = Config(app=asgi, host="0.0.0.0",
                     port=8000, loop="asyncio")
     server = Server(config)
     await server.serve()
-
 
 async def main():
     loop = asyncio.get_running_loop()
@@ -71,4 +70,3 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         print("Encerrado pelo usuário.")
-

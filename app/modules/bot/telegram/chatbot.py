@@ -49,22 +49,20 @@ async def health_check(message: Message):
     except Exception as e:
         log.error("version_check_error", e)
         await message.answer("An error occurred while checking health.")
-        
+
 @dp.message(Command("health"))
-async def health_check(message: Message):
+async def version_check(message: Message):
     try:
         await message.reply("Bot is running smoothly!")
     except Exception as e:
         log.error("health_check_error", e)
         await message.answer("An error occurred while checking health.")
 
-
 @dp.message()
 async def handle_message(message: Message):
     try:
-        await chat.emit_message(UserMessage(
+        await chat.on_bot_message(UserMessage(
             message_id=message.message_id,
-            # chat_id=message.chat.id,
             message=message.text
         ))
     except Exception as e:

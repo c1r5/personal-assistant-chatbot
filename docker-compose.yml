@@ -1,8 +1,8 @@
 services:
   chatbot:
     build: .
-    container_name: chatbot_service
-    image: telegram-chatbot-service
+    container_name: chatbot-service
+    image: chatbot-service
     env_file:
       - ./.env
     ports:
