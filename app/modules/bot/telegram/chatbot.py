@@ -7,7 +7,7 @@ from aiogram.types import BufferedInputFile, Message
 from aiogram.filters import Command
 
 
-from modules.bot.telegram.constants import OWNER_USER_ID, TELEGRAM_BOT_API_KEY
+from constants import OWNER_USER_ID, TELEGRAM_BOT_API_KEY
 from modules.bot.telegram.models.chat_message import UserMessage
 from modules.bot.telegram.chat import Chat
 

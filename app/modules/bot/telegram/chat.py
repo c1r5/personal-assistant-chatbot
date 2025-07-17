@@ -4,7 +4,7 @@ from typing import Any, Callable, Union
 
 from aiogram import Bot
 
-from modules.bot.telegram.constants import OWNER_USER_ID
+from constants import OWNER_USER_ID
 from modules.bot.telegram.models.chat_message import BotMessage, UserMessage
 
 logger = logging.getLogger(__name__)
