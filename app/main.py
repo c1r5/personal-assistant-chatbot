@@ -4,7 +4,7 @@ from uvicorn import Config, Server
 
 from modules.server import asgi
 from modules.bot import run_telegram_bot
-from constants import ENVIRONMENT_MODE
+from constants import ENVIRONMENT_MODE, SERVICE_API_PORT
 from dotenv import load_dotenv
 import asyncio
 import signal
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 # Function to run FastAPI server
 async def run_fastapi():
     config = Config(app=asgi, host="0.0.0.0",
-                    port=8000, loop="asyncio")
+                    port=int(SERVICE_API_PORT), loop="asyncio")
     server = Server(config)
     await server.serve()
 
