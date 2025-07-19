@@ -4,7 +4,6 @@ from io import BytesIO
 
 from pydantic import BaseModel
 
-from modules.bot import send_file, send_message
 from modules.server.rate_limiter import limiter
 
 send_route = APIRouter(prefix="/send")
@@ -13,9 +12,8 @@ send_route = APIRouter(prefix="/send")
 @limiter.limit("5/minute")
 async def upload(request: Request, file: UploadFile = File(...)):
     try:
-        contents = await file.read()
-        buffer = BytesIO(contents)
-        await send_file(buffer, file.filename)
+        # contents = await file.read()
+        # buffer = BytesIO(contents)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -31,7 +29,7 @@ async def message(request: Request, body: MessageBody) -> JSONResponse:
         if not body.message:
             raise HTTPException(status_code=400, detail="Message cannot be empty")
 
-        await send_message(body.message)
+        # await send_message(body.message)
 
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as e:

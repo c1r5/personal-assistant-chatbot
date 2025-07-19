@@ -1,4 +1,4 @@
-from modules.helpers import getenv
+from helpers import getenv
 from typing import Literal
 from typing import cast
 
@@ -11,9 +11,9 @@ if env_value not in ("DEV", "PRD"):
 
 ENVIRONMENT_MODE: EnvironmentMode = cast(EnvironmentMode, env_value)
 
-TELEGRAM_BOT_API_KEY = (getenv("TELEGRAM_BOT_API_KEY_DEV")
+TELEGRAM_BOT_TOKEN = (getenv("TELEGRAM_BOT_TOKEN_DEV")
     if ENVIRONMENT_MODE == "DEV"
-    else getenv("TELEGRAM_BOT_API_KEY_PRD" )
+    else getenv("TELEGRAM_BOT_TOKEN_PRD" )
 )
 
 OWNER_USER_ID = getenv("TELEGRAM_OWNER_ID")
