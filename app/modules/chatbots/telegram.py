@@ -15,11 +15,12 @@ OnMessageCallback = Callable[[Optional[str], str], Awaitable[None]]
 class TelegramChatbotConnector(ChatbotConnector):
     def __init__(self,
         token: str,
+        owner_id: str,
         on_message: Optional[OnMessageCallback] = None
     ):
         self.__bot = Bot(token=token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
         self.__dp = Dispatcher()
-
+        self.__owner_id = owner_id
         self.__on_message = on_message
 
         # Setup handlers manually
@@ -53,6 +54,7 @@ class TelegramChatbotConnector(ChatbotConnector):
     async def __handle_message(self, message: Message):
         if self.__on_message:
             if message.text is not None and message.from_user is not None:
-                await self.__on_message(message.text, str(message.from_user.id))
+                if message.from_user.id == int(self.__owner_id):
+                    await self.__on_message(message.text, str(message.from_user.id))
         else:
             await message.reply("Mensagem recebida!")

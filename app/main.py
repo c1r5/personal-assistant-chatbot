@@ -8,7 +8,7 @@ from uvicorn import Config, Server
 
 from modules.agent import AgentSessionManager
 from modules.message_dispatcher import MessageDispatcher
-from modules.constants import TELEGRAM_BOT_TOKEN, SERVICE_API_PORT, AGENT_API_URL
+from modules.constants import TELEGRAM_BOT_TOKEN, SERVICE_API_PORT, AGENT_API_URL, TELEGRAM_OWNER_ID
 
 from modules.chatbots.telegram import TelegramChatbotConnector
 from modules.server import asgi
@@ -47,7 +47,11 @@ async def main():
     loop = asyncio.get_running_loop()
     stop_event = asyncio.Event()
 
-    dispatcher.add_connector('telegram.connector', TelegramChatbotConnector(TELEGRAM_BOT_TOKEN, on_chatbot_message))
+    dispatcher.add_connector('telegram.connector', TelegramChatbotConnector(
+            token = TELEGRAM_BOT_TOKEN,
+            owner_id = TELEGRAM_OWNER_ID,
+            on_message = on_chatbot_message
+    ))
 
     def shutdown():
         print("Shutdown signal received.")
