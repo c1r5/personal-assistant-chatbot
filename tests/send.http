@@ -1,8 +1,0 @@
-### Send Message
-POST {{BASE_URL}}/send/message
-Content-Type: application/json
-x-api-key: {{API_KEY}}
-
-{
-    "message": "<b>Hello</b>, this is a test message."
-}

@@ -6,8 +6,9 @@ from typing import Optional
 from pathlib import Path
 from uvicorn import Config, Server
 
-from message_dispatcher import MessageDispatcher
-from constants import TELEGRAM_BOT_TOKEN, SERVICE_API_PORT
+from modules.agent import AgentSessionManager
+from modules.message_dispatcher import MessageDispatcher
+from modules.constants import TELEGRAM_BOT_TOKEN, SERVICE_API_PORT, AGENT_API_URL
 
 from modules.chatbots.telegram import TelegramChatbotConnector
 from modules.server import asgi
@@ -15,10 +16,26 @@ from modules.server import asgi
 
 logger = logging.getLogger(__name__)
 dispatcher = MessageDispatcher()
+agent_session_manager = AgentSessionManager()
 
 async def on_chatbot_message(message: Optional[str], chat_id: str) -> None:
-    logger.info(f"Received message from chatbot: [{chat_id}] {message}")
+    if not message:
+        return
 
+    # Garante que a sessão existe
+    await agent_session_manager.create_session(chat_id, AGENT_API_URL)
+
+    session = await agent_session_manager.get_session(chat_id)
+    if not session:
+        logger.error(f"No agent session found for {chat_id}")
+        return
+
+    async def agent_response_handler(response: str):
+        logger.info(f"Agent response: {response}")
+        await dispatcher.dispatch_message(response, chat_id)
+
+    await session.set_agent_response_listener(agent_response_handler)
+    await session.send_message(message)
 # Function to run FastAPI server
 async def run_fastapi():
     config = Config(app=asgi, host="0.0.0.0",

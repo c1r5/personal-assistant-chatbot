@@ -1,6 +1,7 @@
-from helpers import getenv
 from typing import Literal
 from typing import cast
+
+from modules.helpers import getenv
 
 EnvironmentMode = Literal["DEV", "PRD"]
 
@@ -17,5 +18,5 @@ TELEGRAM_BOT_TOKEN = (getenv("TELEGRAM_BOT_TOKEN_DEV")
 )
 
 OWNER_USER_ID = getenv("TELEGRAM_OWNER_ID")
-
 SERVICE_API_PORT = getenv("SERVICE_API_PORT", "8000")
+AGENT_API_URL = getenv("AGENT_API_URL", "ws://localhost:8001/ws/821a3aed-d24c-4a00-b595-b02b29f6cfe6")

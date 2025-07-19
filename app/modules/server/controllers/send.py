@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Request, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
-from io import BytesIO
 
 from pydantic import BaseModel
 
