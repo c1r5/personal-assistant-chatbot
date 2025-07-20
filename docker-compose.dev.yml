@@ -10,3 +10,5 @@ services:
           path: ./docker-compose.dev.yml
         - action: rebuild
           path: ./docker-compose.yml
+    networks:
+      - devnet
