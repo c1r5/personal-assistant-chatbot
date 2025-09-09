@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy to Production
-    runs-on: [self-hosted, linux]
+    runs-on: self-hosted
 
     steps:
       - name: 📥 Checkout do código
